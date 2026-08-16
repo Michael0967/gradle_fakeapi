@@ -13,6 +13,9 @@ Feature: create a product and return its id
     And match response.title == payload.title
     And match response contains { price: 25, description: 'created by the Michael automation' }
     And match response == read('classpath:schemas/product.schema.json')
-    # pass id and title back to the caller
+    # pass values back to the caller
     And def id = response.id
     And def title = response.title
+    And def price = response.price
+    And def categoryId = response.category.id
+    And def categorySlug = response.category.slug
