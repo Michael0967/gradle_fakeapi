@@ -9,13 +9,14 @@ API test automation with **Java + Gradle + Karate** against the public fake API 
 
 ## What is covered
 
-3 feature files, one per functional domain (33 scenarios in total):
+4 feature files, one per functional domain (44 scenarios in total):
 
 | Feature | Tag | Scenarios |
 |---|---|---|
 | Products (CRUD + related + pagination) | `@products` | 16 |
 | Filters (title, price, category, combined) | `@filters` | 7 |
 | Categories | `@categories` | 10 |
+| Users | `@users` | 11 |
 
 Each feature includes negative tests (nonexistent resources, missing required data, invalid values).
 
@@ -35,6 +36,7 @@ The runner is one method, so features are selected by tag with `-Dkarate.tags`:
 ./gradlew clean test -Dkarate.tags=@products
 ./gradlew clean test -Dkarate.tags=@filters
 ./gradlew clean test -Dkarate.tags=@categories
+./gradlew clean test -Dkarate.tags=@users
 ```
 
 Every run regenerates its own report, so you always see only what ran in that execution.
