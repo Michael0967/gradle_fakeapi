@@ -11,6 +11,7 @@ Feature: Filters
     And param title = probe.title
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     * assert response.some(x => x.id == probe.id)
     # leave the api clean
     Given path 'products', probe.id
@@ -35,6 +36,7 @@ Feature: Filters
     And param categoryId = probe.categoryId
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     * assert response.every(x => x.category.id == probe.categoryId)
     Given path 'products', probe.id
     When method delete
@@ -57,6 +59,7 @@ Feature: Filters
     And param price_max = 200
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     And match response == '#[]'
     * assert response.every(x => x.price >= 100)
     * assert response.every(x => x.price <= 200)

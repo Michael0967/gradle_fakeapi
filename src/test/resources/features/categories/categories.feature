@@ -8,6 +8,8 @@ Feature: Categories
     Given path 'categories'
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
+    And match header access-control-allow-origin == '*'
     And match response == '#[]'
     And match each response == read('classpath:schemas/category.schema.json')
 
@@ -21,6 +23,7 @@ Feature: Categories
     Given path 'categories', created.id
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     And match response.name == created.name
 
   Scenario: Rename a category
@@ -73,6 +76,7 @@ Feature: Categories
     Given path 'categories', missingCatId
     When method get
     Then status 400
+    And match header content-type == 'application/json; charset=utf-8'
 
   Scenario: Update a missing category
     * def ghostCatId = 1000000000 + Math.floor(Math.random() * 900000000)

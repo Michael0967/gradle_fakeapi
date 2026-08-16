@@ -14,6 +14,7 @@ Feature: Products
     Given path 'products', created.id
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     And match response.title == created.title
 
   Scenario: Look up a product by its slug
@@ -33,6 +34,7 @@ Feature: Products
     Given path 'products', created.id
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     And match response.title == created.title
     # the api 500s on partial bodies, so send the whole thing
     Given path 'products', created.id
@@ -72,6 +74,8 @@ Feature: Products
     Given path 'products'
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
+    And match header access-control-allow-origin == '*'
     And match response == '#[]'
     And match each response == read('classpath:schemas/product.schema.json')
 
@@ -95,7 +99,8 @@ Feature: Products
     Given path 'products', created.id
     When method delete
     Then status 200
-    # the api answers with a plain "true"
+    # the api answers with a plain "true" served as text/html
+    And match header content-type == 'text/html; charset=utf-8'
     And match response == 'true'
 
   Scenario: Create a product missing required fields
@@ -103,6 +108,7 @@ Feature: Products
     And request { title: 'no price or category here' }
     When method post
     Then status 500
+    And match header content-type == 'application/json; charset=utf-8'
 
   Scenario: Create a product with a bad categoryId
     Given path 'products'
@@ -115,6 +121,7 @@ Feature: Products
     Given path 'products', missingId
     When method get
     Then status 400
+    And match header content-type == 'application/json; charset=utf-8'
 
   Scenario: Fetch by a slug that does not exist
     * def ghostSlug = 'this-slug-does-not-exist-' + java.util.UUID.randomUUID().toString()

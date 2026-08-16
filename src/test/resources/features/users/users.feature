@@ -9,6 +9,8 @@ Feature: Users
     Given path 'users'
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
+    And match header access-control-allow-origin == '*'
     And match response == '#[]'
     And match each response == read('classpath:schemas/user.schema.json')
 
@@ -21,6 +23,7 @@ Feature: Users
     Given path 'users', created.id
     When method get
     Then status 200
+    And match header content-type == 'application/json; charset=utf-8'
     And match response.name == created.name
 
   Scenario: Rename a user
@@ -78,6 +81,7 @@ Feature: Users
     Given path 'users', missingUserId
     When method get
     Then status 400
+    And match header content-type == 'application/json; charset=utf-8'
 
   Scenario: Update a user that does not exist
     * def ghostUserId = 1000000000 + Math.floor(Math.random() * 900000000)

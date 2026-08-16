@@ -4,7 +4,13 @@ Feature: create a product and return its id
   Scenario:
     # random title so the slug never repeats
     * def uid = java.util.UUID.randomUUID().toString()
-    * def payload = { title: 'test product ' + uid, price: 25, description: 'created by the Michael automation', categoryId: 1, images: ['https://i.imgur.com/b.jpg'] }
+    # fetch a real category, the seeded ids change every time the demo api resets
+    Given url baseUrl
+    And path 'categories'
+    When method get
+    Then status 200
+    And def validCategoryId = response[0].id
+    * def payload = { title: 'test product ' + uid, price: 25, description: 'created by the Michael automation', categoryId: validCategoryId, images: ['https://i.imgur.com/b.jpg'] }
     Given url baseUrl
     And path 'products'
     And request payload

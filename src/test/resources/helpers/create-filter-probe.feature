@@ -4,7 +4,13 @@ Feature: create a unique probe product for the filter scenarios
   Scenario:
     # random title so the title filter only hits this probe
     * def uid = java.util.UUID.randomUUID().toString()
-    * def probe = { title: 'filter probe ' + uid, price: 25, description: 'probe', categoryId: 1, images: ['https://i.imgur.com/a.jpg'] }
+    # fetch a real category, the seeded ids change every time the demo api resets
+    Given url baseUrl
+    And path 'categories'
+    When method get
+    Then status 200
+    And def validCategoryId = response[0].id
+    * def probe = { title: 'filter probe ' + uid, price: 25, description: 'probe', categoryId: validCategoryId, images: ['https://i.imgur.com/a.jpg'] }
     Given url baseUrl
     And path 'products'
     And request probe

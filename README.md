@@ -20,6 +20,8 @@ API test automation with **Java + Gradle + Karate** against the public fake API 
 
 Each feature includes negative tests (nonexistent resources, missing required data, invalid values).
 
+All responses are validated at every level: HTTP status code, response headers (`content-type`, `access-control-allow-origin`), body shape against JSON schemas (`src/test/resources/schemas/`), and the data returned by the service.
+
 ## How to run all the tests
 
 From the project root:
