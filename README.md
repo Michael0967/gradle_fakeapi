@@ -59,3 +59,49 @@ The test run generates two reports:
 | Gradle/JUnit report | `build/reports/tests/test/index.html` |
 
 The Karate report shows every feature and scenario with the request and response of each HTTP call, including printed values (`* print`).
+
+---
+
+## Questions
+
+### a. What were the main challenges you faced when implementing the functionalities?
+
+The main challenge was understanding and correctly setting up the **Gradle** build structure. Having never worked with this build tool before, concepts like `build.gradle`, the wrapper (`gradlew`), dependency configuration, and JUnit 5 integration required an initial learning curve. However, with documentation and practice, these obstacles were overcome and allowed for a smooth development of the rest of the project.
+
+### b. What testing techniques were used and what approach was given to automation?
+
+**Karate DSL** on top of JUnit 5 was used as the API test automation framework. The techniques applied include:
+
+- **Feature files with Gherkin**: Each functional domain (products, users, categories, filters) has its own `.feature` file with scenarios written in natural language.
+- **Reusable helper features**: Auxiliary functions (`create-product.feature`, `create-user.feature`, etc.) encapsulate test data creation, avoiding duplication and easing maintenance.
+- **Tags for organization**: Each feature has a tag (`@products`, `@users`, etc.) that allows selective execution of test subsets.
+- **Automatic data cleanup**: In filter tests, a temporary product is created, used for validation, and immediately deleted afterwards, keeping the API clean.
+- **Complete coverage**: Both positive tests (successful CRUD) and negative tests (nonexistent resources, missing data, invalid values) are included.
+
+### c. How did you manage data validation and JSON response structure verification in your automated tests?
+
+Validation was carried out across multiple layers:
+
+1. **JSON schema validation**: Schemas were defined in `src/test/resources/schemas/` (`product.schema.json`, `user.schema.json`, `category.schema.json`) and applied using `match each response == read('classpath:schemas/product.schema.json')`. This verifies that every object in the response has the correct structure and data types.
+
+2. **HTTP header validation**: Headers such as `content-type: application/json; charset=utf-8` and `access-control-allow-origin: *` are verified on every response.
+
+3. **HTTP status code validation**: Each scenario validates the expected response code (200, 201, 404, etc.).
+
+4. **Specific data validation**: `match` expressions are used to compare concrete values like `response.title == created.title` or `response.contains { price: 25 }`.
+
+5. **Conditional validations with JavaScript**: Filter tests use expressions like `response.some(x => x.id == probe.id)` to verify that at least one element meets the condition.
+
+### d. What learnings did you gain from developing this technical test and how do they contribute to your professional growth?
+
+The main learnings were:
+
+- **Gradle**: I understood the build lifecycle, dependency management, wrapper configuration, and how to integrate testing tools within its ecosystem. This knowledge is transferable to any Java project that uses Gradle.
+
+- **Karate DSL**: I learned to express API tests in a declarative and readable way, which facilitates communicating software quality status to the team.
+
+- **Designing maintainable tests**: Separating reusable helpers, using JSON schemas, and automatic data cleanup are practices I will apply in future automation projects.
+
+- **Quality mindset**: Developing tests that cover both the happy path and edge cases strengthened my approach toward more robust and reliable development.
+
+These learnings not only improve my technical capability but also reinforce good software engineering practices valued in the professional field.
