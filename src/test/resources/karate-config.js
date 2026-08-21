@@ -1,6 +1,6 @@
 function fn() {
     var config = {
-        baseUrl: 'https://api.escuelajs.co/api/v1'
+        baseUrl: karate.properties['BASE_URL'] || java.lang.System.getenv('BASE_URL') || 'https://api.escuelajs.co/api/v1'
     };
     return config;
 }

@@ -7,6 +7,35 @@ API test automation with **Java + Gradle + Karate** against the public fake API 
 - JDK 17 or later (tested with JDK 26)
 - No need to install Gradle: the project uses the wrapper (`./gradlew`)
 
+## Configuration: environment variables (`.env`)
+
+All sensitive values (API keys, tokens, credentials) live in a `.env` file at the project root. **Never hardcode them in the source code and never commit this file** — it is already listed in `.gitignore`.
+
+1. Create your local `.env` from the provided template:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Open `.env` and set the base URL of the API under test:
+
+   ```dotenv
+   # .env — DO NOT COMMIT THIS FILE
+   BASE_URL=https://your-api.example.com
+   ```
+
+   | Variable | Purpose |
+   |---|---|
+   | `BASE_URL` | Base URL of the API under test |
+
+3. That's it. `./gradlew test` loads `.env` automatically (see `build.gradle`) and `karate-config.js` exposes the value to every feature as `baseUrl`. It can also be overridden per run with a system property or a real environment variable:
+
+   ```bash
+   ./gradlew test -DBASE_URL=https://other-env.example.com
+   ```
+
+> **Security note**: if you ever need to share the project, share `.env.example` (safe, no secrets), never `.env`. If a real key is accidentally committed, rotate/revoke it immediately — deleting the file is not enough because it stays in git history.
+
 ## What is covered
 
 4 feature files, one per functional domain (44 scenarios in total):
